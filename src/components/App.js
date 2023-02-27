@@ -4,26 +4,28 @@ import { data } from "../data";
 import MovieCard from "./MovieCard";
 import Navbar from "./Navbar";
 function App({ store }) {
-  const { list, favourites, showFavourites } = store.getState();
+  console.log(store.getState());
+  const { movies, search } = store.getState();
+  const { list, favourites, showFavourites } = movies;
+  const { result, showSearchResults } = search;
+
   const [movieList, setMovieList] = useState(list);
   const [favouriteList, setFavouritesList] = useState(favourites);
   const [favouriteTab, setFavouriteTab] = useState(showFavourites);
-
+  const [showResults, setShowResults] = useState(showSearchResults);
   const displayMovies = favouriteTab ? favouriteList : movieList;
-  console.log("favtab", favouriteTab);
   useEffect(() => {
     //make a call to get all movies,here we are using data file
     //whenever we call a dispatch or our state gets changed this subscribe gets rendered
     store.subscribe(() => {
-      setFavouritesList(store.getState().favourites);
-      setMovieList(store.getState().list);
-      setFavouriteTab(store.getState().showFavourites);
+      setFavouritesList(store.getState().movies.favourites);
+      setMovieList(store.getState().movies.list);
+      setFavouriteTab(store.getState().movies.showFavourites);
+      setShowResults(store.getState().search.showSearchResults);
     });
 
     //dispatch to add movies in store
     store.dispatch(addMovies(data));
-
-    console.log(store.getState());
   }, []);
 
   const isMovieFavourite = (movie) => {
@@ -40,7 +42,11 @@ function App({ store }) {
   return (
     <div className="App">
       {/* navbar comp */}
-      <Navbar />
+      <Navbar
+        movie={result}
+        showSearchResults={showResults}
+        dispatch={store.dispatch}
+      />
       <div className="main">
         <div className="tabs">
           <div
