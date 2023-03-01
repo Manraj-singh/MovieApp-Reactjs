@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { StoreContext } from "..";
 import { addResutToMovielist, searchMovie } from "../actions";
 
-export default function Navbar({ dispatch, movie, showSearchResults }) {
+function Navbar({ dispatch, movie, showSearchResults }) {
   // const [showSearchResults, setShowSearchResults] = useState(false);
   const [searchText, setSearchText] = useState("");
 
@@ -43,3 +44,21 @@ export default function Navbar({ dispatch, movie, showSearchResults }) {
     </div>
   );
 }
+
+function NavbarWrapper() {
+  return (
+    <StoreContext.Consumer>
+      {(store) => {
+        const { result, showSearchResults } = store.getState().search;
+        return (
+          <Navbar
+            movie={result}
+            showSearchResults={showSearchResults}
+            dispatch={store.dispatch}
+          />
+        );
+      }}
+    </StoreContext.Consumer>
+  );
+}
+export default NavbarWrapper;

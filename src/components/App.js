@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
+import { StoreContext } from "..";
 import { addMovies, setShowFavourites } from "../actions";
 import { data } from "../data";
 import MovieCard from "./MovieCard";
 import Navbar from "./Navbar";
 function App({ store }) {
-  console.log(store.getState());
   const { movies, search } = store.getState();
   const { list, favourites, showFavourites } = movies;
-  const { result, showSearchResults } = search;
 
   const [movieList, setMovieList] = useState(list);
   const [favouriteList, setFavouritesList] = useState(favourites);
   const [favouriteTab, setFavouriteTab] = useState(showFavourites);
-  const [showResults, setShowResults] = useState(showSearchResults);
   const displayMovies = favouriteTab ? favouriteList : movieList;
   useEffect(() => {
     //make a call to get all movies,here we are using data file
@@ -21,7 +19,6 @@ function App({ store }) {
       setFavouritesList(store.getState().movies.favourites);
       setMovieList(store.getState().movies.list);
       setFavouriteTab(store.getState().movies.showFavourites);
-      setShowResults(store.getState().search.showSearchResults);
     });
 
     //dispatch to add movies in store
@@ -42,11 +39,7 @@ function App({ store }) {
   return (
     <div className="App">
       {/* navbar comp */}
-      <Navbar
-        movie={result}
-        showSearchResults={showResults}
-        dispatch={store.dispatch}
-      />
+      <Navbar />
       <div className="main">
         <div className="tabs">
           <div
@@ -81,4 +74,14 @@ function App({ store }) {
   );
 }
 
-export default App;
+//creating a wrapper over component so it will be able to use the StoreContext consumer and pass to component as prop.
+//we can create consumer wrapper in needed place only and we can avoid proprilling through it
+//NOTE for class components: context consumer can only be used in render method of class component
+function AppWrapper() {
+  return (
+    <StoreContext.Consumer>
+      {(store) => <App store={store} />}
+    </StoreContext.Consumer>
+  );
+}
+export default AppWrapper;

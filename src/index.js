@@ -1,7 +1,8 @@
-import React from "react";
+import React, { createContext } from "react";
+// import { Provider } from "react-redux";
+
 import ReactDOM from "react-dom/client";
 import { applyMiddleware, createStore } from "redux";
-
 import "./index.css";
 import App from "./components/App";
 import rootReducer from "./reducers";
@@ -19,9 +20,21 @@ const thunk =
     next(action);
   };
 const store = createStore(rootReducer, applyMiddleware(thunk));
+
+//creating context
+export const StoreContext = createContext();
+// creating custom provider function
+const Provider = ({ children }) => {
+  return (
+    <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
+  );
+};
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App store={store} />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );
