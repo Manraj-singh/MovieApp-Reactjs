@@ -47,11 +47,17 @@ export function searchMovie(movie) {
   const url = `https://www.omdbapi.com/?t=${movie}&apikey=8850ebe7`;
 
   return function (dispatch) {
-    fetch(url)
-      .then((response) => response.json())
-      .then((movie) => {
-        dispatch(addSearchResult(movie));
-      });
+    async function fetchMovie(){
+      const response =  await fetch(url); 
+      const movie =  await response.json()
+      dispatch(addSearchResult(movie));
+    }
+    fetchMovie();
+    // fetch(url)
+    //   .then((response) => response.json())
+    //   .then((movie) => {
+    //     dispatch(addSearchResult(movie));
+    //   });
 
     //dispatch action to add result to search result
   };
