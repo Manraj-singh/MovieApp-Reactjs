@@ -9,8 +9,8 @@ const initialMovieState = {
   showFavourites: false,
 };
 const initialSearchState = {
-  result: {},
-  showSearchResults: false,
+  result: null,
+  showSearchResults: null,
 };
 const initialRootState = {
   movies: initialMovieState,
