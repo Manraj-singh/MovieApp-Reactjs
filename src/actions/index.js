@@ -44,7 +44,7 @@ export function addResutToMovielist(movie) {
 export function searchMovie(movie) {
   //make a call to api and search the movie with title
   console.log("action search", movie);
-  const url = `http://www.omdbapi.com/?t=${movie}&apikey=8850ebe7`;
+  const url = `https://www.omdbapi.com/?t=${movie}&apikey=8850ebe7`;
 
   return function (dispatch) {
     fetch(url)
